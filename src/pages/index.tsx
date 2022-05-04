@@ -1,4 +1,4 @@
-import { Widget } from "~components/Widget";
+import Widget from "~components/Widget";
 import type { NextPage } from "next";
 
 const Page: NextPage = () => {
