@@ -1,7 +1,8 @@
 import { FC, useState } from "react";
 
+import Loading from "~components/Loading";
 import html2canvas from "html2canvas";
-import { Camera, CircleNotch, Trash } from "phosphor-react";
+import { Camera, Trash } from "phosphor-react";
 
 export type ScreenshotProps = {
   screenshot: string | null;
@@ -51,7 +52,7 @@ const Screenshot: FC<ScreenshotProps> = ({ screenshot, onScreenshot }) => {
       className="w-10 h-10 bg-zinc-800 rounded-md border-transparent hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 flex items-center justify-center"
     >
       {isTakingScreenshot ? (
-        <CircleNotch weight="bold" className="w-4 h-4 animate-spin" />
+        <Loading />
       ) : (
         <Camera className="w-6 h-6 text-zinc-100 opacity-50" />
       )}
