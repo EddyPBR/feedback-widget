@@ -4,26 +4,34 @@ import { FeedbackType } from "~utils/feedbackTypes";
 
 import Feedback from "./Feedback";
 
+export type FeedbackStatus = "SUCCESS" | "FAILED";
+
 const Form: FC = () => {
   const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
-  const [feedbackSent, setFeedbackSent] = useState(false);
+  const [feedbackSent, setFeedbackSent] = useState<FeedbackStatus | null>(null);
 
   const handleRestartFeedback = () => {
-    setFeedbackSent(false);
+    setFeedbackSent(null);
     setFeedbackType(null);
   };
 
   return (
     <div className="bg-zinc-900 p-4 relative rounded-2xl mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto">
-      {feedbackSent ? (
-        <Feedback.Success onFeedbackRestartRequest={handleRestartFeedback} />
+      {feedbackSent !== null ? (
+        feedbackSent === "SUCCESS" ? (
+          <Feedback.Success onFeedbackRestartRequest={handleRestartFeedback} />
+        ) : (
+          <Feedback.Failed onFeedbackRestartRequest={handleRestartFeedback} />
+        )
       ) : (
         <>
           {feedbackType ? (
             <Feedback.Content
               feedbackType={feedbackType}
               onFeedbackRestart={handleRestartFeedback}
-              onFeedbackSent={() => setFeedbackSent(true)}
+              onFeedbackSent={(status: FeedbackStatus) =>
+                setFeedbackSent(status)
+              }
             />
           ) : (
             <Feedback.Option onFeedbackTypeChange={setFeedbackType} />

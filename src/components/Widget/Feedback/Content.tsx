@@ -6,11 +6,12 @@ import { feedbackTypes, FeedbackType } from "~utils/feedbackTypes";
 import Image from "next/image";
 
 import Button from "../Button";
+import type { FeedbackStatus } from "../Form";
 
 export type ContentProps = {
   feedbackType: FeedbackType;
   onFeedbackRestart: () => void;
-  onFeedbackSent: () => void;
+  onFeedbackSent: (status: FeedbackStatus) => void;
 };
 
 const Content: FC<ContentProps> = ({
@@ -35,13 +36,12 @@ const Content: FC<ContentProps> = ({
         comment,
         screenshot,
       });
+      onFeedbackSent("SUCCESS");
     } catch (error: any) {
-      console.log(error?.data?.message);
+      onFeedbackSent("FAILED");
     } finally {
       setIsSendingFeedback(false);
     }
-
-    onFeedbackSent();
   };
 
   return (
