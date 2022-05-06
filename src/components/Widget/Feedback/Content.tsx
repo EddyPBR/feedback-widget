@@ -1,5 +1,7 @@
 import { FC, FormEvent, useState } from "react";
 
+import Loading from "~components/Loading";
+import api from "~services/api";
 import { feedbackTypes, FeedbackType } from "~utils/feedbackTypes";
 import Image from "next/image";
 
@@ -18,11 +20,27 @@ const Content: FC<ContentProps> = ({
 }) => {
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [comment, setComment] = useState("");
+  const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
   const feedbackTypeInfo = feedbackTypes[feedbackType];
 
   const handleSubmitFeedback = async (event: FormEvent) => {
     event.preventDefault();
+
+    setIsSendingFeedback(true);
+
+    try {
+      await api.post("/feedbacks", {
+        type: feedbackType,
+        comment,
+        screenshot,
+      });
+    } catch (error: any) {
+      console.log(error?.data?.message);
+    } finally {
+      setIsSendingFeedback(false);
+    }
+
     onFeedbackSent();
   };
 
@@ -62,10 +80,10 @@ const Content: FC<ContentProps> = ({
 
           <button
             type="submit"
-            disabled={comment.length === 0}
+            disabled={comment.length === 0 || isSendingFeedback}
             className="p-2 bg-brand-500 rounded border-transparent flex-1 flex justify-center items-center text-sm hover:bg-brand-300 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 disabled:opacity-50 disabled:hover:bg-brand-500 disabled:cursor-not-allowed"
           >
-            Enviar feedback
+            {isSendingFeedback ? <Loading /> : "Enviar feedback"}
           </button>
         </footer>
       </form>
