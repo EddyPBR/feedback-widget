@@ -28,7 +28,6 @@
     "node": true
   },
   "rules": {
-    "comma-dangle": ["error", "always-multiline"],
     "semi": "error",
     "prettier/prettier": "error",
     "react-hooks/rules-of-hooks": "error",
